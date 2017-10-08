@@ -32,6 +32,6 @@ class OnboardingItemView : LinearLayout {
     fun renderOnboardingItem(item: OnboardingItem) {
         onboarding_item_title.text = item.title
         onboarding_item_description.text = item.description
-        onboarding_item_image.setImageDrawable(item.image)
+        //onboarding_item_image.setImageDrawable(item.image)
     }
 }
