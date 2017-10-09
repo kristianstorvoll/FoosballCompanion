@@ -1,9 +1,9 @@
 package no.kristo.foosballcompanion.ui.view
 
 import android.content.Context
-import android.view.View
 import android.widget.LinearLayout
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.view_onboarding_signup.view.*
 import no.kristo.foosballcompanion.R
 
 /**
@@ -12,14 +12,16 @@ import no.kristo.foosballcompanion.R
  */
 class OnboardingLoginView : LinearLayout {
 
-    val auth by lazy { FirebaseAuth.getInstance() }
-
     constructor(context: Context) : super(context) {
         internalInit()
     }
 
     fun internalInit() {
         inflate(context, R.layout.view_onboarding_signup, this)
+    }
+
+    fun onFacebookButtonClicked(cb: () -> Unit) {
+        this.facebookButton.setOnClickListener { cb() }
     }
 
 }

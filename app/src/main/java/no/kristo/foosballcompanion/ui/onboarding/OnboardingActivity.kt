@@ -1,27 +1,38 @@
-package no.kristo.foosballcompanion.ui
+package no.kristo.foosballcompanion.ui.onboarding
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_onboarding.*
 import no.kristo.foosballcompanion.R
 import no.kristo.foosballcompanion.ui.view.OnboardingItem
 import no.kristo.foosballcompanion.ui.view.OnboardingItemView
 import no.kristo.foosballcompanion.ui.view.OnboardingLoginView
+import no.kristo.foosballcompanion.ui.home.HomeActivity
+import no.kristo.foosballcompanion.ui.view.ViewPagerAdapter
+
 
 /**
  * Displays some short information and a sign-up page at the end
  * Created by Kristian on 07.10.2017.
  */
-class OnboardingActivity : AppCompatActivity() {
+class OnboardingActivity : AppCompatActivity(), LoginDelegate.LoginDelegateListener {
 
-    val adapter by lazy { MyAdapter() }
+    companion object {
+        fun newIntent(context: Context): Intent {
+            val intent = Intent(context, OnboardingActivity::class.java)
+            return intent
+        }
+    }
+
+    val adapter by lazy { ViewPagerAdapter() }
     val loginView by lazy { OnboardingLoginView(this) }
+
+    var loginDelegate: LoginDelegate? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +43,12 @@ class OnboardingActivity : AppCompatActivity() {
 
         nextButton.setOnClickListener { goToNextPage() }
         prevButton.setOnClickListener { goToPreviousPage() }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        loginDelegate?.onActivityResult(requestCode, resultCode, data)
     }
 
     fun setupToolbar() {
@@ -75,37 +92,26 @@ class OnboardingActivity : AppCompatActivity() {
 
         tabLayout.setupWithViewPager(viewPager)
         adapter.views.addAll(generateOnboardingViews())
+
         adapter.views.add(loginView)
+        loginView.onFacebookButtonClicked {
+            loginDelegate = FacebookLoginDelegate(this, this)
+            loginDelegate?.signIn()
+        }
+
         adapter.notifyDataSetChanged()
     }
 
     private fun generateOnboardingViews(): Collection<View> {
-        val views = ArrayList<View>()
-        for (i in 1..3) {
-            val v = OnboardingItemView(this).also { it.renderOnboardingItem(OnboardingItem("Hello #$i", "Description baby", null)) }
-            views.add(v)
-        }
-
-        return views
-    }
-}
-
-class MyAdapter(val views: MutableList<View> = ArrayList()) : PagerAdapter() {
-
-    override fun isViewFromObject(view: View?, `object`: Any?): Boolean {
-        return view == `object`
+        //create 3 views and render an onboarding item for each of them
+        return (1..3).map { i -> OnboardingItemView(this).also { it.renderOnboardingItem(OnboardingItem("Hello #$i", "Description baby", null)) } }
     }
 
-    override fun getCount(): Int {
-        return views.size
+    override val complete: (Boolean) -> Unit = {
+        startActivity(HomeActivity.newIntent(this))
+        finish()
     }
+    override val error: (Throwable) -> Unit = {
 
-    override fun instantiateItem(container: ViewGroup?, position: Int): Any {
-        container?.addView(views[position])
-        return views[position]
-    }
-
-    override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
-       container?.removeView(`object` as View?)
     }
 }

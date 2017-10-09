@@ -25,7 +25,7 @@ class OnboardingItemView : LinearLayout {
         internalInit()
     }
 
-    fun internalInit() {
+    private fun internalInit() {
         inflate(context, R.layout.view_onboarding_item, this)
     }
 

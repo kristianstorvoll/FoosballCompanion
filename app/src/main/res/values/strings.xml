@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FoosballCompanion</string>
+    
+    <string name="home_navigiation_item_profile">Profil</string>
 </resources>
