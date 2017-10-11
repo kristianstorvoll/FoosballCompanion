@@ -2,7 +2,6 @@ package no.kristo.foosballcompanion.ui.onboarding
 
 import android.app.Activity
 import android.content.Intent
-import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -10,15 +9,13 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import no.kristo.foosballcompanion.model.User
 import timber.log.Timber
-import no.kristo.foosballcompanion.model.UserStore
 
 
 /**
  * Created by Kristian on 08.10.2017.
  */
-abstract class LoginDelegate(val onComplete: LoginDelegateListener) {
+abstract class LoginDelegate(val listener: LoginDelegateListener) {
 
     protected val fireAuth by lazy { FirebaseAuth.getInstance() }
 
@@ -29,51 +26,55 @@ abstract class LoginDelegate(val onComplete: LoginDelegateListener) {
         val complete: (Boolean) -> Unit
         val error: (Throwable) -> Unit
     }
+
+    protected fun handleResult(token: String?) {
+        val authCredential = FacebookAuthProvider.getCredential(token ?: "")
+
+        fireAuth.signInWithCredential(authCredential).addOnFailureListener {
+            Timber.e(it)
+        }.addOnCompleteListener {
+            if (it.isSuccessful) {
+                Timber.d("signInWithCredential:success")
+                listener.complete(true)
+            } else {
+                Timber.e("signInWithCredential:failure", it.exception)
+                listener.error(it.exception!!)
+            }
+        }
+    }
+
+    protected fun handleCancel() {
+        //no implementation yet
+    }
+
+    protected fun handleError(error: Throwable) {
+        listener.error(error)
+    }
 }
 
-class FacebookLoginDelegate(val activity: Activity, onComplete: LoginDelegate.LoginDelegateListener) : LoginDelegate(onComplete) {
+class FacebookLoginDelegate(val activity: Activity, listener: LoginDelegateListener) : LoginDelegate(listener) {
 
     val callbackManager: CallbackManager by lazy { CallbackManager.Factory.create() }
     val loginManager: LoginManager by lazy { LoginManager.getInstance() }
-
-    val permissions: Collection<String>
 
     init {
         loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
 
             override fun onCancel() {
                 Timber.d("Facebook login cancelled")
+                handleCancel()
             }
 
             override fun onError(error: FacebookException?) {
-                Timber.e(error)
+                Timber.e(error, "FacebookLoginDelegate onError")
+                error?.let { handleError(it) }
             }
 
             override fun onSuccess(result: LoginResult?) {
-                Timber.d("Successfully logged in: ${result.toString()}")
-                handleResult(result?.accessToken)
+                result?.let { handleResult(it.accessToken.token) }
             }
 
         })
-        permissions = arrayOf("email", "public_profile").asList()
-    }
-
-    private fun handleResult(accessToken: AccessToken?) {
-        if (accessToken != null) {
-
-            val authCredential = FacebookAuthProvider.getCredential(accessToken?.token ?: "")
-
-            fireAuth.signInWithCredential(authCredential).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Timber.d("signInWithCredential:success")
-                    onComplete.complete(true)
-                } else {
-                    Timber.e("signInWithCredential:failure", it.exception)
-                    onComplete.error(it.exception!!)
-                }
-            }
-
-        }
     }
 
     override fun signIn() {

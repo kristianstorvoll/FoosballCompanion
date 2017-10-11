@@ -2,11 +2,8 @@ package no.kristo.foosballcompanion.ui.view
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import kotlinx.android.synthetic.main.view_onboarding_item.view.*
-import kotterknife.bindView
 import no.kristo.foosballcompanion.R
 
 

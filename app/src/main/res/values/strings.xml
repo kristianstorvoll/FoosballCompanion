@@ -2,4 +2,7 @@
     <string name="app_name">FoosballCompanion</string>
     
     <string name="home_navigiation_item_profile">Profil</string>
+    <string name="home_navigiation_item_nfc">Enheter</string>
+    <string name="view_my_devices_title">Mine enheter</string>
+    <string name="view_profile_sign_out">Logg ut</string>
 </resources>

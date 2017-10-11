@@ -4,6 +4,7 @@ enum class LoginProvider(value: String) {
     FACEBOOK("facebook.com"),
     TWITTER("twitter")
 }
+
 data class User(
         val userUid: String = "",
         val displayName: String = "",
@@ -12,6 +13,7 @@ data class User(
         val provider: LoginProvider
 )
 
-object UserStore {
-    var user: User? = null
-}
+
+data class UserData(var devices: MutableList<NfcDevice> = ArrayList())
+
+data class NfcDevice(var id: String = "", var description: String = "")

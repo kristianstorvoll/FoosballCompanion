@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal">
+
+
+    <ImageView
+        android:layout_marginTop="16dp"
+        tools:src="@drawable/com_facebook_profile_picture_blank_portrait"
+        android:id="@+id/profileImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
+    <TextView
+        tools:text="Kristian Storvoll"
+        android:gravity="center_horizontal"
+        android:id="@+id/profileName"
+        android:maxLines="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimary"
+        android:alpha=".5"/>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/signOutButton"
+            android:layout_gravity="right"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_profile_sign_out"/>
+
+    </FrameLayout>
+
+</LinearLayout>

@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FoosballCompanion.iml" filepath="$PROJECT_DIR$/FoosballCompanion.iml" />
-      <module fileurl="file://D:\Dev\FoosballCompanion\FoosballCompanion.iml" filepath="D:\Dev\FoosballCompanion\FoosballCompanion.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://D:\Dev\FoosballCompanion\app\app.iml" filepath="D:\Dev\FoosballCompanion\app\app.iml" />
     </modules>
   </component>
 </project>

@@ -1,6 +1,7 @@
 package no.kristo.foosballcompanion
 
 import android.app.Application
+import android.os.Handler
 import no.kristo.foosballcompanion.model.AppModel
 import timber.log.Timber
 
@@ -13,6 +14,8 @@ class FoosballApp : Application() {
         lateinit var instance: FoosballApp
             private set
     }
+
+
 
     override fun onCreate() {
         super.onCreate()

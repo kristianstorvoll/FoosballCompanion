@@ -25,22 +25,31 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //noinspection GradleCompatible
     implementation "com.android.support:appcompat-v7:$support_version"
     implementation "com.android.support:recyclerview-v7:$support_version"
     implementation "com.android.support:design:$support_version"
+    implementation "android.arch.lifecycle:extensions:1.0.0-beta2"
+    implementation "android.arch.lifecycle:common-java8:1.0.0-beta2"
 
     // FIREBASE
     implementation "com.google.firebase:firebase-core:$firebase_version"
     implementation "com.google.firebase:firebase-auth:$firebase_version"
+    implementation "com.google.firebase:firebase-firestore:$firebase_version"
+
 
     //FACEBOOK SDK
     implementation "com.facebook.android:facebook-login:$facebook_sdk_version"
 
     //UTILS
     implementation 'com.jakewharton.timber:timber:4.5.1'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+
 
     //REACTIVE
     implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
 
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'

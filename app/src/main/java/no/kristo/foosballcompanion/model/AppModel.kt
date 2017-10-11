@@ -24,7 +24,7 @@ class AppModel {
      * The current user object
      */
     var currentUser: User? = null
-
+        private set
 
     /**
      * Observe the current user
@@ -41,6 +41,13 @@ class AppModel {
             return callback?.invoke(this)
         }
 
+        configureFirebaseAuth()
+
+        isConfigured = true
+        return callback?.invoke(this)
+    }
+
+    private fun configureFirebaseAuth() {
         if (fireAuth.currentUser != null) {
             setCurrentUser(fireAuth.currentUser)
         }
@@ -49,9 +56,8 @@ class AppModel {
             Timber.d("AppModel -> Auth State changed")
             setCurrentUser(it.currentUser)
         }
-
-        return callback?.invoke(this)
     }
+
 
     private fun setCurrentUser(user: FirebaseUser?) {
         if (currentUser?.userUid.equals(user?.uid)) {
@@ -63,6 +69,11 @@ class AppModel {
             currentUser = User(user.uid, user.displayName!!, user.email!!, user.photoUrl?.toString() ?: "", LoginProvider.FACEBOOK)
             userRelay.accept(currentUser)
         }
+    }
+
+    fun signOut() {
+        FirebaseAuth.getInstance().signOut()
+        currentUser = null
     }
 
 }
